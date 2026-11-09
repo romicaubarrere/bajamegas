@@ -1,0 +1,8 @@
+{
+  "name": "bajamegas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Compresor de videos que procesa los archivos localmente en el navegador",
+  "scripts": { "test": "node --test", "check": "node --check app.js && node --check plan.js" }
+}
