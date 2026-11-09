@@ -28,3 +28,9 @@ npm run check
 ```
 
 Las pruebas cubren presupuesto de tamaño, orientación, resolución, límites de calidad y entradas inválidas. Ver `TESTING.md` para las pruebas realizadas en navegador.
+
+## Conversor de documentos
+
+La pestaña «Convertir documentos» acepta PDF con texto, EPUB sin DRM, MD, DOCX, TXT y HTML, y exporta a esos seis formatos. Procesa texto y títulos básicos; no conserva imágenes, tablas, notas ni el diseño de página. Los PDF escaneados requieren OCR externo. Google Docs debe exportarse primero a DOCX; los DOC binarios antiguos no se admiten. Límite: 40 MiB, archivos ZIP expandidos hasta 80 MiB y PDF hasta 500 páginas.
+
+Las bibliotecas se cargan desde jsDelivr con versiones fijas (JSZip 3.10.1, PDF.js 4.10.38 y pdfmake 0.2.20 con Roboto). Requiere conexión para esa carga; el archivo del usuario permanece en el navegador.

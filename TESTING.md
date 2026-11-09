@@ -26,3 +26,7 @@ Fecha: 9 de noviembre de 2026.
 - Archivo de texto: rechazo con un mensaje claro.
 
 El tamaño y la velocidad varían según el video y el dispositivo. No se probaron Safari ni dispositivos móviles físicos.
+
+## Conversor de documentos
+
+7 pruebas Node aprobadas. En Chrome, se generaron PDF, EPUB, DOCX, MD, TXT y HTML a partir de un texto con títulos, tildes, ñ y símbolos XML; cada salida se volvió a leer y se comparó el texto extraído. Todas pasaron. Se verificó también el formulario de selección, el cambio de formato y la vista previa. La captura automatizada de descargas del navegador no produjo un evento en este entorno, por lo que no se verificó la llegada al disco mediante ese mecanismo.
