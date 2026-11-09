@@ -1,0 +1,239 @@
+<!doctype html><html lang="es-UY"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<title>Bajamegas | Comprimí videos en tu navegador</title>
+<meta name="description" content="Reducí el tamaño de tus videos gratis, directamente en tu navegador, sin subirlos a un servidor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: una sola columna angosta, de arriba hacia abajo: elegir → ajustar → procesar → descargar */
+:root {
+  --bg: #f2f4f3;
+  --surface: #ffffff;
+  --fg: #17201d;
+  --muted: #5b6863;
+  --line: #d6dcd9;
+  --accent: #0d6b62;
+  --accent-ink: #ffffff;
+  --accent-soft: #dcefec;
+  --rec: #cf3a28;
+  --warn-bg: #fff3df;
+  --warn-fg: #7a4a00;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111715; --surface: #18201d; --fg: #e6ece9; --muted: #96a39e; --line: #2c3633;
+    --accent: #43b8aa; --accent-ink: #06201c; --accent-soft: #173a35; --rec: #ff6a55;
+    --warn-bg: #3a2c12; --warn-fg: #f3cf8f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111715; --surface: #18201d; --fg: #e6ece9; --muted: #96a39e; --line: #2c3633;
+  --accent: #43b8aa; --accent-ink: #06201c; --accent-soft: #173a35; --rec: #ff6a55;
+  --warn-bg: #3a2c12; --warn-fg: #f3cf8f; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap {
+  max-width: 720px; margin: 0 auto;
+  padding-block: 40px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px;
+}
+header { display: flex; flex-direction: column; gap: 8px; }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(2.2rem, 7vw, 3.2rem); line-height: 1; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+h1 .unit { font-family: var(--mono); font-weight: 500; font-size: 0.38em; letter-spacing: 0.04em; color: var(--accent); vertical-align: top; margin-left: 4px; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 0; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 60ch; }
+
+.btn {
+  font: inherit; font-weight: 600; cursor: pointer; border-radius: 10px;
+  padding: 10px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn:focus-visible, .chip:focus-visible, .drop:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.linkbtn { font: inherit; background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+.drop {
+  border: 2px dashed var(--line); border-radius: 16px; background: var(--surface);
+  padding: 44px 20px; display: grid; place-items: center; text-align: center; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.drop-inner strong { font-family: var(--display); font-size: 1.3rem; font-weight: 600; }
+.drop-inner small { color: var(--muted); }
+
+.howto { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.howto li { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.howto b { font-family: var(--mono); font-weight: 500; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.howto span { color: var(--muted); font-size: .9rem; }
+
+.filecard { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 18px; align-items: start; }
+.filecard video { width: 100%; max-width: 100%; border-radius: 10px; background: #000; aspect-ratio: 16 / 10; object-fit: contain; }
+.meta { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; margin: 0; }
+.meta dt { color: var(--muted); font-size: .85rem; }
+.meta dd { margin: 0; font-family: var(--mono); font-size: .9rem; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+
+.panel { display: flex; flex-direction: column; gap: 16px; padding-top: 20px; border-top: 1px solid var(--line); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: inherit; font-size: .9rem; cursor: pointer; padding: 7px 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+}
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--fg); font-weight: 600; }
+.fields { display: flex; flex-wrap: wrap; gap: 14px 24px; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: .85rem; color: var(--muted); }
+.field .inline { display: flex; align-items: center; gap: 8px; }
+input[type="number"], select {
+  font: inherit; font-family: var(--mono); padding: 8px 10px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+}
+input[type="number"] { width: 6.5em; }
+.plan { margin: 0; font-size: .9rem; color: var(--muted); }
+.plan b { color: var(--fg); font-family: var(--mono); font-weight: 500; }
+.warn { margin: 0; padding: 10px 14px; border-radius: 10px; background: var(--warn-bg); color: var(--warn-fg); font-size: .9rem; }
+
+.stage { position: relative; border-radius: 12px; overflow: hidden; background: #000; display: grid; place-items: center; max-height: 380px; }
+.stage canvas { max-width: 100%; max-height: 380px; display: block; }
+.rec { position: absolute; top: 10px; left: 12px; font-family: var(--mono); font-size: .75rem; letter-spacing: .1em; color: #fff; background: rgba(0,0,0,.55); padding: 3px 8px; border-radius: 6px; display: flex; gap: 6px; align-items: center; }
+.rec::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--rec); animation: blink 1.2s infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+@media (prefers-reduced-motion: reduce) { .rec::before { animation: none; } }
+.bar { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar > div { height: 100%; width: 0; background: var(--accent); transition: width .3s linear; }
+.row { display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.note { margin: 0; color: var(--muted); font-size: .9rem; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+
+.result { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.result .from { font-family: var(--mono); color: var(--muted); text-decoration: line-through; font-size: 1.1rem; }
+.result .to { font-family: var(--display); font-weight: 800; font-size: clamp(2rem, 7vw, 2.8rem); line-height: 1; }
+.result .delta { font-family: var(--mono); font-size: .95rem; color: var(--accent); font-weight: 500; }
+#outVideo { width: 100%; max-width: 100%; max-height: 380px; border-radius: 12px; background: #000; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.msg { margin: 0; font-size: .9rem; color: var(--muted); }
+.error { padding: 14px 16px; border-radius: 12px; background: var(--warn-bg); color: var(--warn-fg); }
+.error p { margin: 0 0 8px; }
+
+.fine { border-top: 1px solid var(--line); padding-top: 18px; color: var(--muted); font-size: .85rem; display: flex; flex-direction: column; gap: 6px; }
+.fine p { margin: 0; max-width: 65ch; }
+#worker { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.rec { z-index: 1; }
+
+@media (max-width: 560px) {
+  .wrap { padding-block: 24px 40px; }
+  .filecard { grid-template-columns: minmax(0, 1fr); }
+  .howto { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+}
+</style>
+
+</head><body>
+<main class="wrap">
+  <header>
+    <h1>Bajamegas<span class="unit">MB↓</span></h1>
+    <p class="lede">Achicá un video para mandarlo por mail o WhatsApp. Todo pasa en tu navegador: el archivo no se sube a ningún lado, no hay límite de usos y es gratis.</p>
+  </header>
+
+  <section id="pick" class="drop" tabindex="0" role="button" aria-label="Elegir un video">
+    <input type="file" id="file" accept="video/*" hidden>
+    <div class="drop-inner">
+      <strong>Arrastrá un video acá</strong>
+      <button class="btn primary" id="pickBtn" type="button">Elegir video</button>
+      <small>MP4, MOV, WebM: cualquier video que tu navegador pueda reproducir</small>
+    </div>
+  </section>
+
+  <ol class="howto" id="howto">
+    <li><b>Elegís</b><span>el video que pesa demasiado</span></li>
+    <li><b>Decís cuánto</b><span>los MB que querés que pese, por ejemplo 20 para mail</span></li>
+    <li><b>Descargás</b><span>la versión liviana, lista para mandar</span></li>
+  </ol>
+
+  <section id="setup" class="stack" hidden>
+    <div class="filecard">
+      <video id="preview" controls playsinline muted preload="metadata"></video>
+      <div class="stack" style="gap:10px">
+        <dl class="meta">
+          <dt>Archivo</dt><dd id="mName">—</dd>
+          <dt>Pesa</dt><dd id="mSize">—</dd>
+          <dt>Dura</dt><dd id="mDur">—</dd>
+          <dt>Resolución</dt><dd id="mRes">—</dd>
+        </dl>
+        <div><button class="linkbtn" id="changeBtn" type="button">Cambiar video</button></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>¿Cuánto querés que pese?</h2>
+      <div class="chips" id="chips">
+        <button class="chip" type="button" data-mb="10">10 MB</button>
+        <button class="chip" type="button" data-mb="20">20 MB · Gmail</button>
+        <button class="chip" type="button" data-mb="50">50 MB</button>
+        <button class="chip" type="button" data-frac="0.5">La mitad</button>
+        <button class="chip" type="button" data-frac="0.25">Un cuarto</button>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="target">Tamaño objetivo</label>
+          <div class="inline"><input id="target" type="number" min="0.5" step="0.1" value="20" required><span>MB</span></div>
+        </div>
+        <div class="field">
+          <label for="res">Resolución</label>
+          <select id="res">
+            <option value="auto" selected>Automática (recomendada)</option>
+            <option value="orig">Igual que el original</option>
+            <option value="1080">1080p</option>
+            <option value="720">720p</option>
+            <option value="480">480p</option>
+            <option value="360">360p</option>
+          </select>
+        </div>
+      </div>
+      <p class="plan" id="plan"></p>
+      <p class="warn" id="planWarn" hidden></p>
+      <div><button class="btn primary" id="go" type="button">Comprimir</button></div>
+    </div>
+  </section>
+
+  <section id="work" class="stack" hidden>
+    <div class="stage"><canvas id="canvas"></canvas><span class="rec">PROCESANDO</span></div>
+    <div class="bar" role="progressbar" aria-label="Compresión" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="barFill"></div></div>
+    <div class="row"><span id="pct">0%</span><span id="eta"></span></div>
+    <p class="note">Tarda más o menos lo mismo que dura el video. Dejá esta pestaña abierta y a la vista: si cambiás de pestaña o minimizás, el navegador frena el proceso.</p>
+    <div><button class="btn" id="cancel" type="button">Cancelar</button></div>
+  </section>
+
+  <section id="done" class="stack" hidden>
+    <div class="result">
+      <span class="from" id="rFrom"></span>
+      <span class="to" id="rTo"></span>
+      <span class="delta" id="rDelta"></span>
+    </div>
+    <p class="warn" id="overWarn" hidden></p>
+    <video id="outVideo" controls playsinline></video>
+    <div class="actions">
+      <button class="btn primary" id="dl" type="button">Descargar</button>
+      <button class="btn" id="again" type="button">Probar otro tamaño</button>
+      <button class="btn" id="newFile" type="button">Otro video</button>
+    </div>
+    <p class="msg" id="dlMsg" role="status"></p>
+  </section>
+
+  <section id="err" class="error" role="alert" hidden></section>
+
+  <footer class="fine">
+    <p>El tamaño final puede quedar un poco arriba o abajo del objetivo. Si se pasa, probá de nuevo pidiendo unos MB menos.</p>
+    <p>El formato de salida depende de tu navegador: MP4 cuando lo permite y WebM como alternativa, cuya compatibilidad depende de la aplicación donde lo compartas.</p>
+  </footer>
+</main>
+
+<script type="module" src="./app.js"></script>
+
+</body></html>
