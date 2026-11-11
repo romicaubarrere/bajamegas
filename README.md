@@ -31,10 +31,14 @@ Las pruebas cubren presupuesto de tamaño, orientación, resolución, límites d
 
 ## Conversor de documentos
 
-La pestaña «Convertir documentos» acepta PDF con texto, EPUB sin DRM, MD, DOCX, TXT y HTML, y exporta a esos seis formatos. Procesa texto y títulos básicos; no conserva imágenes, tablas, notas ni el diseño de página. Los PDF escaneados requieren OCR externo. Google Docs debe exportarse primero a DOCX; los DOC binarios antiguos no se admiten. Límite: 40 MiB, archivos ZIP expandidos hasta 80 MiB y PDF hasta 500 páginas.
+La pestaña «Convertir documentos» acepta PDF con texto, EPUB sin DRM, MD, DOCX, TXT y HTML, y exporta a esos seis formatos. Procesa texto y títulos básicos; no conserva imágenes, tablas, notas ni el diseño de página. Los PDF escaneados requieren OCR externo. Google Docs debe exportarse primero a DOCX; los DOC binarios antiguos no se admiten. Límite: PDF hasta 200 MiB; otros documentos hasta 40 MiB y ZIP expandidos hasta 80 MiB. Los PDF largos se leen secuencialmente en tandas de 500 páginas, acumulando el texto en orden para generar un único archivo de salida; no hay límite de 500 páginas para la conversión.
 
 Las bibliotecas se cargan desde jsDelivr con versiones fijas (JSZip 3.10.1, PDF.js 4.10.38 y pdfmake 0.2.20 con Roboto). Requiere conexión para esa carga; el archivo del usuario permanece en el navegador.
 
 ## Dividir PDF
 
-La pestaña «Dividir PDF» admite originales de hasta 200 MiB y genera archivos independientes de 1 a 500 páginas por parte. Conserva el contenido visual de las páginas y permite descargar cada parte o seleccionarla directamente en el conversor, donde continúa el límite de 40 MiB por archivo. No tiene el límite de 500 páginas para el original. Requiere un PDF sin contraseña y carga PDF-lib 1.17.1 desde jsDelivr. La división no es OCR ni reduce el peso de cada página.
+La pestaña «Dividir PDF» admite originales de hasta 200 MiB y genera archivos independientes de 1 a 500 páginas por parte. Conserva el contenido visual de las páginas y permite descargar cada parte o seleccionarla directamente en el conversor, donde se admiten PDF hasta 200 MiB por archivo. No tiene el límite de 500 páginas para el original. Requiere un PDF sin contraseña y carga PDF-lib 1.17.1 desde jsDelivr. La división no es OCR ni reduce el peso de cada página.
+
+### Libro completo para Kindle
+
+Elegir el PDF completo y tocar «Pasar a EPUB para Kindle» basta para generar una única descarga. La lectura secuencial se organiza en tandas de 500 páginas; el texto de todas las tandas se ensambla en un solo EPUB. No se generan archivos intermedios para el usuario ni hace falta dividir el PDF antes.

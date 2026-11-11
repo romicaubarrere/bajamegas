@@ -41,9 +41,9 @@ $('splitGo').addEventListener('click',async()=>{
       const actions=document.createElement('div');actions.className='actions';
       const download=document.createElement('button');download.className='btn primary';download.textContent='Descargar parte '+(part.index+1);
       download.onclick=()=>{const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();};actions.appendChild(download);
-      const convert=document.createElement('button');convert.className='btn';convert.textContent='Convertir esta parte';convert.disabled=file.size>40*1024*1024;
+      const convert=document.createElement('button');convert.className='btn';convert.textContent='Convertir esta parte';convert.disabled=file.size>200*1024*1024;
       convert.onclick=()=>{const dt=new DataTransfer();dt.items.add(file);$('docFile').files=dt.files;$('docFile').dispatchEvent(new Event('change'));$('tab-document').click();$('panel-document').scrollIntoView({behavior:'smooth'});};actions.appendChild(convert);row.appendChild(actions);
-      if(convert.disabled){const note=document.createElement('p');note.className='warn';note.textContent='Esta parte supera los 40 MB del conversor. Dividí de nuevo con menos páginas por parte.';row.appendChild(note);}
+      if(convert.disabled){const note=document.createElement('p');note.className='warn';note.textContent='Esta parte supera los 200 MB del conversor. Dividí de nuevo con menos páginas por parte.';row.appendChild(note);}
       $('splitResults').appendChild(row);status('Parte '+(part.index+1)+' de '+part.total+' lista.');
       await new Promise(r=>setTimeout(r,0));
     }

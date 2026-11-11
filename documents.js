@@ -59,13 +59,13 @@ async function readDocument(file, status) {
     let pdf;
     try {
       pdf=await task.promise;
-      if(pdf.numPages>500)throw new Error('Este PDF tiene más de 500 páginas. Tocá “Dividir este PDF” para crear partes y convertirlas por separado.');
       const blocks=[];
       for(let i=1;i<=pdf.numPages;i++) {
-        status('Leyendo página '+i+' de '+pdf.numPages+'…');
+        status('Leyendo tanda '+Math.ceil(i/500)+' de '+Math.ceil(pdf.numPages/500)+' · página '+i+' de '+pdf.numPages+'… El resultado será un solo archivo.');
         const page=await pdf.getPage(i), content=await page.getTextContent();
         let text='';for(const item of content.items)if('str' in item)text+=item.str+(item.hasEOL?'\n':' ');
         if(text.trim())blocks.push({text:text.replace(/[ \t]+/g,' ').trim(),level:0});page.cleanup();
+        if(i%500===0)await new Promise(resolve=>setTimeout(resolve,0));
       }
       return blocks;
     } catch(error) {
@@ -105,16 +105,16 @@ const message=text=>{$('docStatus').textContent=text;};
 function clearResult(){if(resultURL)URL.revokeObjectURL(resultURL);resultURL=null;$('docDownload').hidden=true;$('docPreviewWrap').hidden=true;}
 $('docFile').addEventListener('change',()=>{
   version++;selected=$('docFile').files[0]||null;clearResult();
-  $('docSplit').hidden=!selected||! /\.pdf$/i.test(selected.name);
   $('docName').textContent=selected?selected.name+' · '+(selected.size/1024/1024).toFixed(2)+' MB':'Todavía no elegiste un documento.';
-  $('docConvert').disabled=!selected;message('');
+  $('docConvert').disabled=!selected;$('docKindle').disabled=!selected;message('');
 });
 $('docFormat').addEventListener('change',()=>{version++;clearResult();message('');});
 $('docConvert').addEventListener('click',async()=>{
   if(!selected||busy)return;
-  if(selected.size>40*1024*1024){message('Elegí un documento de hasta 40 MB.');return;}
+  const maxMB=/\.pdf$/i.test(selected.name)?200:40;
+  if(selected.size>maxMB*1024*1024){message('Elegí un documento de hasta '+maxMB+' MB.');return;}
   const current=++version, source=selected, format=$('docFormat').value;
-  busy=true;clearResult();$('docConvert').disabled=true;$('docFile').disabled=true;$('docFormat').disabled=true;
+  busy=true;clearResult();$('docConvert').disabled=true;$('docKindle').disabled=true;$('docFile').disabled=true;$('docFormat').disabled=true;
   message('Preparando conversión…');
   try {
     const blocks=await readDocument(source,message);
@@ -122,11 +122,11 @@ $('docConvert').addEventListener('click',async()=>{
     message('Creando '+format.toUpperCase()+'…');
     const title=source.name.replace(/\.[^.]+$/,'')||'documento';
     const blob=await writeDocument(blocks,format,title);if(current!==version)return;
-    resultURL=URL.createObjectURL(blob);$('docDownload').dataset.filename=title+'-convertido.'+format;$('docDownload').hidden=false;
+    resultURL=URL.createObjectURL(blob);$('docDownload').textContent='Descargar '+format.toUpperCase();$('docDownload').dataset.filename=title+'-convertido.'+format;$('docDownload').hidden=false;
     $('docPreview').textContent=plainText(blocks).slice(0,2500);$('docPreviewWrap').hidden=false;
-    message('Listo: '+format.toUpperCase()+' · '+(blob.size/1024).toFixed(1)+' KB. Revisá la vista de texto antes de descargar.');
+    message('Listo: '+format.toUpperCase()+' · '+(blob.size/1024).toFixed(1)+' KB. Un solo archivo con todo el texto. Revisá la vista previa antes de descargar.');
   } catch(error){message(error.message||'No se pudo convertir este documento. Probá con otro archivo.');}
-  finally{busy=false;$('docConvert').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
+  finally{busy=false;$('docConvert').disabled=!selected;$('docKindle').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
 });
 // Tabs keep the video and document workflows independent.
 for(const mode of ['video','document','split']) $('tab-'+mode).addEventListener('click',()=>{
@@ -140,4 +140,4 @@ $('docDownload').addEventListener('click',()=>{if(!resultURL)return;const a=docu
 
 export {readDocument,writeDocument,script};
 
-$('docSplit').addEventListener('click',()=>{if(selected)document.dispatchEvent(new CustomEvent('bajamegas:split',{detail:selected}));});
+$('docKindle').addEventListener('click',()=>{if(!selected||busy)return;$('docFormat').value='epub';$('docFormat').dispatchEvent(new Event('change'));$('docConvert').click();});

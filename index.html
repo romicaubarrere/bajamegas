@@ -243,26 +243,28 @@ a.btn {text-decoration:none;}
     <label for="docFile" class="btn">Elegí un documento
       <input id="docFile" type="file" accept=".pdf,.epub,.md,.markdown,.docx,.txt,.html,.htm" style="display:block;margin-top:12px;max-width:100%">
     </label>
-    <div><button id="docSplit" class="btn" hidden>Dividir este PDF</button></div>
     <p id="docName" class="note">Todavía no elegiste un documento.</p>
+    <p class="note">¿Un libro largo para tu lector? Elegí EPUB: el PDF se lee en tandas de 500 páginas y se descarga <strong>un solo EPUB con todo el texto</strong>, en el orden original. No tenés que dividirlo antes.</p>
+    <div class="actions"><button id="docKindle" class="btn primary" disabled>Pasar a EPUB para Kindle</button><button id="docDownload" class="btn primary" hidden>Descargar EPUB</button></div>
+    <p id="docStatus" role="status" aria-live="polite" class="msg"></p>
+    <details><summary>Otros formatos</summary><div class="stack" style="margin-top:12px">
     <div class="field"><label for="docFormat">Convertir a</label>
       <select id="docFormat"><option value="pdf">PDF</option><option value="epub">EPUB · lector de libros</option><option value="md">Markdown (.md)</option><option value="docx">Word (.docx)</option><option value="txt">Texto (.txt)</option><option value="html">HTML</option></select>
     </div>
     <p class="warn">Conversión de texto: no conserva imágenes, tablas ni el diseño exacto. Mantiene títulos básicos cuando el formato lo permite. PDF escaneado requiere OCR; EPUB con DRM y Word .doc antiguo no son compatibles.</p>
-    <p class="note">Hasta 40 MB. Para Google Docs: Archivo → Descargar → Microsoft Word (.docx), y elegí ese archivo acá. Markdown conserva el contenido y los títulos; otros estilos pueden quedar como texto.</p>
-    <div class="actions"><button id="docConvert" class="btn primary" disabled>Convertir documento</button><button id="docDownload" class="btn primary" hidden>Descargar documento</button></div>
-    <p id="docStatus" role="status" aria-live="polite" class="msg"></p>
+    <p class="note">PDF hasta 200 MB, sin límite de 500 páginas. Otros documentos hasta 40 MB. Para Google Docs: Archivo → Descargar → Microsoft Word (.docx), y elegí ese archivo acá. Markdown conserva el contenido y los títulos; otros estilos pueden quedar como texto.</p>
+    <div><button id="docConvert" class="btn" disabled>Convertir documento</button></div></div></details>
     <details id="docPreviewWrap" hidden><summary>Vista previa del texto</summary><pre id="docPreview" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-height:280px;overflow:auto"></pre></details>
     <p class="note">Necesitás conexión para cargar los conversores. Tus documentos no se envían a un servidor.</p>
   </section>
   <section id="panel-split" role="tabpanel" aria-labelledby="tab-split" class="stack" hidden>
     <h2>Un PDF grande, en partes</h2>
-    <p class="lede">Si tu PDF tiene más de 500 páginas, dividilo acá. Después podés descargar cada parte o llevarla directamente al conversor.</p>
+    <p class="lede">Usá esta opción si querés varios PDF independientes para compartir por separado. Para convertir un libro completo a un solo EPUB, usá «Convertir documentos» sin dividirlo antes.</p>
     <label class="btn" for="splitFile">Elegí el PDF completo<input id="splitFile" type="file" accept=".pdf,application/pdf" style="display:block;margin-top:12px;max-width:100%"></label>
     <p id="splitName" class="note">Todavía no elegiste un PDF.</p>
     <div class="field"><label for="splitSize">Páginas por parte</label><input id="splitSize" type="number" min="1" max="500" step="1" value="500"></div>
     <p id="splitPlan" class="plan"></p>
-    <p class="note">Hasta 500 páginas por parte y 200 MB para el original. El conversor acepta partes de hasta 40 MB; si alguna pesa más, probá dividir con menos páginas.</p>
+    <p class="note">Hasta 500 páginas por parte y 200 MB para el original. Cada parte se descarga por separado.</p>
     <p class="note">Las páginas conservan su texto e imágenes. Todo se procesa en tu navegador. Los PDF protegidos con contraseña deben desbloquearse antes.</p>
     <div class="actions"><button id="splitGo" class="btn primary" disabled>Dividir PDF</button><button id="splitCancel" class="btn" hidden>Cancelar división</button></div>
     <p id="splitStatus" class="msg" role="status" aria-live="polite"></p>

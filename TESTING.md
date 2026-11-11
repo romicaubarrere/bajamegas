@@ -36,3 +36,9 @@ El tamaño y la velocidad varían según el video y el dispositivo. No se probar
 9 pruebas Node aprobadas. Prueba de integración con PDF-lib 1.17.1: PDF de 1.201 páginas numeradas dividido en 500 + 500 + 201 páginas. Se reabrieron las tres partes con pypdf y se verificaron el texto numerado y las dimensiones de las 1.201 páginas, sin omisiones ni duplicados. Cancelación comprobada después de la primera parte.
 
 Prueba de interfaz en Chrome: PDF de 501 páginas → dos partes (500 + 1). Descarga de la segunda parte completada; «Convertir esta parte» seleccionó el fragmento en el conversor y lo convirtió a TXT sin activar el límite de 500 páginas.
+
+## PDF largo a un único EPUB
+
+Prueba de integración en Chrome: PDF de 1.201 páginas con texto numerado → un único EPUB. Se volvió a leer el EPUB y se verificaron los 1.201 textos en el orden original, sin páginas de texto omitidas o duplicadas. El límite de 500 páginas se sustituyó por lectura secuencial en tandas y el límite de tamaño PDF pasó a 200 MiB.
+
+Interfaz Kindle: seleccionar PDF de 1.201 páginas → un clic en «Pasar a EPUB para Kindle» → un único botón «Descargar EPUB». Descarga única completada en Chrome.
