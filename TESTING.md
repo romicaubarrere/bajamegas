@@ -30,3 +30,9 @@ El tamaño y la velocidad varían según el video y el dispositivo. No se probar
 ## Conversor de documentos
 
 7 pruebas Node aprobadas. En Chrome, se generaron PDF, EPUB, DOCX, MD, TXT y HTML a partir de un texto con títulos, tildes, ñ y símbolos XML; cada salida se volvió a leer y se comparó el texto extraído. Todas pasaron. Se verificó también el formulario de selección, el cambio de formato y la vista previa. La captura automatizada de descargas del navegador no produjo un evento en este entorno, por lo que no se verificó la llegada al disco mediante ese mecanismo.
+
+## Divisor de PDF
+
+9 pruebas Node aprobadas. Prueba de integración con PDF-lib 1.17.1: PDF de 1.201 páginas numeradas dividido en 500 + 500 + 201 páginas. Se reabrieron las tres partes con pypdf y se verificaron el texto numerado y las dimensiones de las 1.201 páginas, sin omisiones ni duplicados. Cancelación comprobada después de la primera parte.
+
+Prueba de interfaz en Chrome: PDF de 501 páginas → dos partes (500 + 1). Descarga de la segunda parte completada; «Convertir esta parte» seleccionó el fragmento en el conversor y lo convirtió a TXT sin activar el límite de 500 páginas.

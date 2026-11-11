@@ -145,6 +145,7 @@ a.btn {text-decoration:none;}
   <div role="tablist" aria-label="Herramientas" class="chips">
     <button class="chip" id="tab-video" role="tab" aria-selected="true" aria-controls="panel-video">Comprimir video</button>
     <button class="chip" id="tab-document" role="tab" aria-selected="false" aria-controls="panel-document">Convertir documentos</button>
+  <button class="chip" id="tab-split" role="tab" aria-selected="false" aria-controls="panel-split">Dividir PDF</button>
   </div>
   <div id="panel-video" role="tabpanel" aria-labelledby="tab-video" class="stack">
 
@@ -242,6 +243,7 @@ a.btn {text-decoration:none;}
     <label for="docFile" class="btn">Elegí un documento
       <input id="docFile" type="file" accept=".pdf,.epub,.md,.markdown,.docx,.txt,.html,.htm" style="display:block;margin-top:12px;max-width:100%">
     </label>
+    <div><button id="docSplit" class="btn" hidden>Dividir este PDF</button></div>
     <p id="docName" class="note">Todavía no elegiste un documento.</p>
     <div class="field"><label for="docFormat">Convertir a</label>
       <select id="docFormat"><option value="pdf">PDF</option><option value="epub">EPUB · lector de libros</option><option value="md">Markdown (.md)</option><option value="docx">Word (.docx)</option><option value="txt">Texto (.txt)</option><option value="html">HTML</option></select>
@@ -253,6 +255,19 @@ a.btn {text-decoration:none;}
     <details id="docPreviewWrap" hidden><summary>Vista previa del texto</summary><pre id="docPreview" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-height:280px;overflow:auto"></pre></details>
     <p class="note">Necesitás conexión para cargar los conversores. Tus documentos no se envían a un servidor.</p>
   </section>
+  <section id="panel-split" role="tabpanel" aria-labelledby="tab-split" class="stack" hidden>
+    <h2>Un PDF grande, en partes</h2>
+    <p class="lede">Si tu PDF tiene más de 500 páginas, dividilo acá. Después podés descargar cada parte o llevarla directamente al conversor.</p>
+    <label class="btn" for="splitFile">Elegí el PDF completo<input id="splitFile" type="file" accept=".pdf,application/pdf" style="display:block;margin-top:12px;max-width:100%"></label>
+    <p id="splitName" class="note">Todavía no elegiste un PDF.</p>
+    <div class="field"><label for="splitSize">Páginas por parte</label><input id="splitSize" type="number" min="1" max="500" step="1" value="500"></div>
+    <p id="splitPlan" class="plan"></p>
+    <p class="note">Hasta 500 páginas por parte y 200 MB para el original. El conversor acepta partes de hasta 40 MB; si alguna pesa más, probá dividir con menos páginas.</p>
+    <p class="note">Las páginas conservan su texto e imágenes. Todo se procesa en tu navegador. Los PDF protegidos con contraseña deben desbloquearse antes.</p>
+    <div class="actions"><button id="splitGo" class="btn primary" disabled>Dividir PDF</button><button id="splitCancel" class="btn" hidden>Cancelar división</button></div>
+    <p id="splitStatus" class="msg" role="status" aria-live="polite"></p>
+    <ol id="splitResults" class="stack" style="list-style:none;padding:0;margin:0" aria-label="Partes del PDF"></ol>
+  </section>
   <footer class="fine">
     <p>El tamaño final puede quedar un poco arriba o abajo del objetivo. Si se pasa, probá de nuevo pidiendo unos MB menos.</p>
     <p>El formato de salida depende de tu navegador: MP4 cuando lo permite y WebM como alternativa, cuya compatibilidad depende de la aplicación donde lo compartas.</p>
@@ -261,5 +276,6 @@ a.btn {text-decoration:none;}
 
 <script type="module" src="./app.js"></script>
 <script type="module" src="./documents.js"></script>
+<script type="module" src="./pdf-split.js"></script>
 
 </body></html>

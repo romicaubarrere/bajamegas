@@ -59,7 +59,7 @@ async function readDocument(file, status) {
     let pdf;
     try {
       pdf=await task.promise;
-      if(pdf.numPages>500)throw new Error('Este PDF tiene más de 500 páginas. Dividilo antes de convertirlo.');
+      if(pdf.numPages>500)throw new Error('Este PDF tiene más de 500 páginas. Tocá “Dividir este PDF” para crear partes y convertirlas por separado.');
       const blocks=[];
       for(let i=1;i<=pdf.numPages;i++) {
         status('Leyendo página '+i+' de '+pdf.numPages+'…');
@@ -105,6 +105,7 @@ const message=text=>{$('docStatus').textContent=text;};
 function clearResult(){if(resultURL)URL.revokeObjectURL(resultURL);resultURL=null;$('docDownload').hidden=true;$('docPreviewWrap').hidden=true;}
 $('docFile').addEventListener('change',()=>{
   version++;selected=$('docFile').files[0]||null;clearResult();
+  $('docSplit').hidden=!selected||! /\.pdf$/i.test(selected.name);
   $('docName').textContent=selected?selected.name+' · '+(selected.size/1024/1024).toFixed(2)+' MB':'Todavía no elegiste un documento.';
   $('docConvert').disabled=!selected;message('');
 });
@@ -128,13 +129,15 @@ $('docConvert').addEventListener('click',async()=>{
   finally{busy=false;$('docConvert').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
 });
 // Tabs keep the video and document workflows independent.
-for(const mode of ['video','document']) $('tab-'+mode).addEventListener('click',()=>{
+for(const mode of ['video','document','split']) $('tab-'+mode).addEventListener('click',()=>{
   document.querySelector('footer').hidden=mode!=='video';
-  for(const id of ['video','document']){
+  for(const id of ['video','document','split']){
     $('panel-'+id).hidden=id!==mode;$('tab-'+id).setAttribute('aria-selected',String(id===mode));
   }
 });
 
 $('docDownload').addEventListener('click',()=>{if(!resultURL)return;const a=document.createElement('a');a.href=resultURL;a.download=$('docDownload').dataset.filename;document.body.appendChild(a);a.click();a.remove();});
 
-export {readDocument,writeDocument};
+export {readDocument,writeDocument,script};
+
+$('docSplit').addEventListener('click',()=>{if(selected)document.dispatchEvent(new CustomEvent('bajamegas:split',{detail:selected}));});
