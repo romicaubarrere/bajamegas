@@ -244,14 +244,22 @@ a.btn {text-decoration:none;}
       <input id="docFile" type="file" accept=".pdf,.epub,.md,.markdown,.docx,.txt,.html,.htm" style="display:block;margin-top:12px;max-width:100%">
     </label>
     <p id="docName" class="note">Todavía no elegiste un documento.</p>
-    <p class="note">¿Un libro largo para tu lector? Elegí EPUB: el PDF se lee en tandas de 500 páginas y se descarga <strong>un solo EPUB con todo el texto</strong>, en el orden original. No tenés que dividirlo antes.</p>
-    <div class="actions"><button id="docKindle" class="btn primary" disabled>Pasar a EPUB para Kindle</button><button id="docDownload" class="btn primary" hidden>Descargar EPUB</button></div>
+    <p class="note">¿Un libro largo o escaneado? Tocá el botón para Kindle: el PDF se lee en tandas de 500 páginas y se descarga <strong>un solo EPUB con todo el texto</strong>, en el orden original. No tenés que dividirlo antes.</p>
+    <label><input type="checkbox" id="docScan"> Libro escaneado o páginas dobles (detección automática + OCR)</label>
+    <div id="docScanOptions" class="stack" hidden>
+      <p class="note">Los escaneos conocidos y los PDF sin texto se detectan solos. También podés activar este modo manualmente. Ordena primero la izquierda y después la derecha, elimina encabezados repetidos y une palabras cortadas. Usa el texto existente; si falta, reconoce la imagen con OCR. El resultado sigue siendo un solo archivo.</p>
+      <div class="fields"><div class="field"><label for="docLayout">Páginas del libro</label><select id="docLayout"><option value="auto">Detectar páginas dobles</option><option value="double">Dos páginas por hoja (izquierda → derecha)</option><option value="single">Una página por hoja</option></select></div>
+      <div class="field"><label for="docLanguage">Idioma del OCR</label><select id="docLanguage"><option value="spa">Español</option><option value="eng">Inglés</option></select></div></div>
+      <label><input type="checkbox" id="docForceOCR"> Rehacer todo el OCR (para texto mal reconocido; tarda más)</label>
+      <p class="warn">El OCR puede cometer errores. Un libro completo puede tardar bastante: dejá esta pestaña abierta. No recupera el diseño ni las imágenes del libro en el EPUB.</p>
+    </div>
+    <div class="actions"><button id="docKindle" class="btn primary" disabled>Pasar a EPUB para Kindle</button><button id="docDownload" class="btn primary" hidden>Descargar EPUB</button><button id="docCancel" class="btn" hidden>Cancelar conversión</button></div>
     <p id="docStatus" role="status" aria-live="polite" class="msg"></p>
     <details><summary>Otros formatos</summary><div class="stack" style="margin-top:12px">
     <div class="field"><label for="docFormat">Convertir a</label>
       <select id="docFormat"><option value="pdf">PDF</option><option value="epub">EPUB · lector de libros</option><option value="md">Markdown (.md)</option><option value="docx">Word (.docx)</option><option value="txt">Texto (.txt)</option><option value="html">HTML</option></select>
     </div>
-    <p class="warn">Conversión de texto: no conserva imágenes, tablas ni el diseño exacto. Mantiene títulos básicos cuando el formato lo permite. PDF escaneado requiere OCR; EPUB con DRM y Word .doc antiguo no son compatibles.</p>
+    <p class="warn">Conversión de texto: no conserva imágenes, tablas ni el diseño exacto. Mantiene títulos básicos cuando el formato lo permite. Para PDF escaneado, activá el modo OCR; EPUB con DRM y Word .doc antiguo no son compatibles.</p>
     <p class="note">PDF hasta 200 MB, sin límite de 500 páginas. Otros documentos hasta 40 MB. Para Google Docs: Archivo → Descargar → Microsoft Word (.docx), y elegí ese archivo acá. Markdown conserva el contenido y los títulos; otros estilos pueden quedar como texto.</p>
     <div><button id="docConvert" class="btn" disabled>Convertir documento</button></div></div></details>
     <details id="docPreviewWrap" hidden><summary>Vista previa del texto</summary><pre id="docPreview" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-height:280px;overflow:auto"></pre></details>

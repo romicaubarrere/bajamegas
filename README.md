@@ -31,7 +31,7 @@ Las pruebas cubren presupuesto de tamaño, orientación, resolución, límites d
 
 ## Conversor de documentos
 
-La pestaña «Convertir documentos» acepta PDF con texto, EPUB sin DRM, MD, DOCX, TXT y HTML, y exporta a esos seis formatos. Procesa texto y títulos básicos; no conserva imágenes, tablas, notas ni el diseño de página. Los PDF escaneados requieren OCR externo. Google Docs debe exportarse primero a DOCX; los DOC binarios antiguos no se admiten. Límite: PDF hasta 200 MiB; otros documentos hasta 40 MiB y ZIP expandidos hasta 80 MiB. Los PDF largos se leen secuencialmente en tandas de 500 páginas, acumulando el texto en orden para generar un único archivo de salida; no hay límite de 500 páginas para la conversión.
+La pestaña «Convertir documentos» acepta PDF con texto, EPUB sin DRM, MD, DOCX, TXT y HTML, y exporta a esos seis formatos. Procesa texto y títulos básicos; no conserva imágenes, tablas, notas ni el diseño de página. Los PDF escaneados pueden procesarse con el OCR integrado. Google Docs debe exportarse primero a DOCX; los DOC binarios antiguos no se admiten. Límite: PDF hasta 200 MiB; otros documentos hasta 40 MiB y ZIP expandidos hasta 80 MiB. Los PDF largos se leen secuencialmente en tandas de 500 páginas, acumulando el texto en orden para generar un único archivo de salida; no hay límite de 500 páginas para la conversión.
 
 Las bibliotecas se cargan desde jsDelivr con versiones fijas (JSZip 3.10.1, PDF.js 4.10.38 y pdfmake 0.2.20 con Roboto). Requiere conexión para esa carga; el archivo del usuario permanece en el navegador.
 
@@ -42,3 +42,9 @@ La pestaña «Dividir PDF» admite originales de hasta 200 MiB y genera archivos
 ### Libro completo para Kindle
 
 Elegir el PDF completo y tocar «Pasar a EPUB para Kindle» basta para generar una única descarga. La lectura secuencial se organiza en tandas de 500 páginas; el texto de todas las tandas se ensambla en un solo EPUB. No se generan archivos intermedios para el usuario ni hace falta dividir el PDF antes.
+
+## Libros escaneados y OCR
+
+El modo Kindle detecta PDF producidos por ClearScan/Paper Capture y documentos sin texto en las dos primeras hojas; también puede activarse manualmente. Usa PDF.js para respetar la rotación, divide visualmente hojas apaisadas en mitades y ordena izquierda antes de derecha. Si hay texto utilizable, lo ordena por coordenadas; si falta o está muy dañado, rasteriza la página y aplica Tesseract.js 6.0.1 con Tesseract.js-core 6.0.0. El usuario puede forzar OCR de todas las páginas en español o inglés.
+
+Se procesa una hoja por vez, reutilizando un único worker OCR y liberando los canvas, con progreso y cancelación. El texto se limpia mediante reglas para guiones de fin de línea, saltos y encabezados repetidos, y termina en un único archivo. El OCR es aproximado y no hace corrección editorial; notas al pie, tablas y diseños complejos pueden perder estructura. Se recorta un margen pequeño de la imagen antes del OCR para reducir ruido del escáner. Las bibliotecas y modelos requieren conexión, pero el PDF no se envía a un servidor.

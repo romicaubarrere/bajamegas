@@ -42,3 +42,18 @@ Prueba de interfaz en Chrome: PDF de 501 páginas → dos partes (500 + 1). Desc
 Prueba de integración en Chrome: PDF de 1.201 páginas con texto numerado → un único EPUB. Se volvió a leer el EPUB y se verificaron los 1.201 textos en el orden original, sin páginas de texto omitidas o duplicadas. El límite de 500 páginas se sustituyó por lectura secuencial en tandas y el límite de tamaño PDF pasó a 200 MiB.
 
 Interfaz Kindle: seleccionar PDF de 1.201 páginas → un clic en «Pasar a EPUB para Kindle» → un único botón «Descargar EPUB». Descarga única completada en Chrome.
+
+## Libros escaneados y OCR
+
+13 pruebas Node aprobadas: detección de hoja doble, orden de columnas, encabezados, numeración, guiones blandos y unión de palabras entre páginas, además de las pruebas existentes.
+
+Pruebas en Chrome con Tesseract en español:
+
+- Hoja doble de un PDF escaneado real: orden de lectura izquierda → derecha con el texto existente.
+- OCR forzado de ambas mitades de esa hoja: 6.671 caracteres reconocidos; revisada una muestra de texto.
+- PDF sintético compuesto únicamente por una imagen: OCR automático de las dos mitades, sin capa de texto.
+- Cancelación durante el reconocimiento: operación abortada y worker finalizado.
+- Libro completo de 204 hojas: 395 mitades/hojas con texto existente y 9 procesadas por OCR; 1.224.921 caracteres y 1.952 párrafos en un único EPUB. La detección automática funcionó sin marcar manualmente el modo escaneado.
+- Descarga de ese EPUB completada. Se validaron mimetype sin compresión, XML de contenedor, OPF, contenido XHTML e índice.
+
+No se garantiza transcripción perfecta ni se comparó el texto completo palabra por palabra con el impreso. El resultado incluyó aviso de confianza OCR baja.

@@ -25,7 +25,7 @@ async function openZip(file) {
   if(zip.file('META-INF/encryption.xml'))throw new Error('Este EPUB contiene recursos cifrados. Usá una copia sin protección DRM.');
   return zip;
 }
-async function readDocument(file, status) {
+async function readDocument(file, status, options = {}) {
   const ext=file.name.split('.').pop().toLowerCase();
   if(['txt','md','markdown'].includes(ext))return fromText(await file.text(),ext!=='txt');
   if(['html','htm'].includes(ext))return htmlBlocks(await file.text());
@@ -59,8 +59,23 @@ async function readDocument(file, status) {
     let pdf;
     try {
       pdf=await task.promise;
+      let scanned=options.scanned;
+      if(!scanned){
+        const metadata=await pdf.getMetadata().catch(()=>({info:{}}));
+        scanned=/Paper Capture|ClearScan|OCR/i.test(metadata.info?.Producer||'');
+        if(!scanned){
+          let text='';
+          for(let number=1;number<=Math.min(2,pdf.numPages);number++){
+            const sample=await pdf.getPage(number),content=await sample.getTextContent();
+            text+=content.items.filter(item=>'str' in item).map(item=>item.str).join('').trim();sample.cleanup();
+          }
+          scanned=!text;
+        }
+      }
+      if(scanned){options.onScanned?.();const {readScannedBook}=await import('./book-ocr.js');return await readScannedBook(pdf,pdfjs,status,options,script);}
       const blocks=[];
       for(let i=1;i<=pdf.numPages;i++) {
+        if(options.signal?.aborted)throw new DOMException('Cancelado','AbortError');
         status('Leyendo tanda '+Math.ceil(i/500)+' de '+Math.ceil(pdf.numPages/500)+' · página '+i+' de '+pdf.numPages+'… El resultado será un solo archivo.');
         const page=await pdf.getPage(i), content=await page.getTextContent();
         let text='';for(const item of content.items)if('str' in item)text+=item.str+(item.hasEOL?'\n':' ');
@@ -100,7 +115,7 @@ async function writeDocument(blocks,format,title) {
   zip.file('EPUB/nav.xhtml',`<?xml version="1.0" encoding="utf-8"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><head><title>Índice</title></head><body><nav epub:type="toc"><h1>Índice</h1><ol><li><a href="content.xhtml">${xml(title)}</a></li></ol></nav></body></html>`);
   return zip.generateAsync({type:'blob',mimeType:'application/epub+zip',compression:'DEFLATE'});
 }
-let selected=null, resultURL=null, version=0, busy=false;
+let selected=null, resultURL=null, version=0, busy=false, conversion=null;
 const message=text=>{$('docStatus').textContent=text;};
 function clearResult(){if(resultURL)URL.revokeObjectURL(resultURL);resultURL=null;$('docDownload').hidden=true;$('docPreviewWrap').hidden=true;}
 $('docFile').addEventListener('change',()=>{
@@ -115,18 +130,22 @@ $('docConvert').addEventListener('click',async()=>{
   if(selected.size>maxMB*1024*1024){message('Elegí un documento de hasta '+maxMB+' MB.');return;}
   const current=++version, source=selected, format=$('docFormat').value;
   busy=true;clearResult();$('docConvert').disabled=true;$('docKindle').disabled=true;$('docFile').disabled=true;$('docFormat').disabled=true;
+  conversion=new AbortController();$('docCancel').hidden=false;
+  for(const id of ['docScan','docLayout','docLanguage','docForceOCR'])$(id).disabled=true;
   message('Preparando conversión…');
   try {
-    const blocks=await readDocument(source,message);
+    let report=null;
+    const blocks=await readDocument(source,message,{scanned:$('docScan').checked,layout:$('docLayout').value,language:$('docLanguage').value,forceOCR:$('docForceOCR').checked,signal:conversion.signal,onReport:value=>report=value,onScanned:()=>{$('docScan').checked=true;$('docScanOptions').hidden=false;}});
+    if(conversion.signal.aborted)throw new DOMException('Cancelado','AbortError');
     if(!blocks.length)throw new Error('No se encontró texto. Si es un PDF escaneado o una imagen, necesitás OCR antes de convertirlo.');
     message('Creando '+format.toUpperCase()+'…');
     const title=source.name.replace(/\.[^.]+$/,'')||'documento';
     const blob=await writeDocument(blocks,format,title);if(current!==version)return;
     resultURL=URL.createObjectURL(blob);$('docDownload').textContent='Descargar '+format.toUpperCase();$('docDownload').dataset.filename=title+'-convertido.'+format;$('docDownload').hidden=false;
     $('docPreview').textContent=plainText(blocks).slice(0,2500);$('docPreviewWrap').hidden=false;
-    message('Listo: '+format.toUpperCase()+' · '+(blob.size/1024).toFixed(1)+' KB. Un solo archivo con todo el texto. Revisá la vista previa antes de descargar.');
-  } catch(error){message(error.message||'No se pudo convertir este documento. Probá con otro archivo.');}
-  finally{busy=false;$('docConvert').disabled=!selected;$('docKindle').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
+    message('Listo: '+format.toUpperCase()+' · '+(blob.size/1024).toFixed(1)+' KB. Un solo archivo con todo el texto. Revisá la vista previa antes de descargar.'+(report?.warning||''));
+  } catch(error){message(conversion?.signal.aborted?'Conversión cancelada. Podés volver a intentarlo.':error.message||'No se pudo convertir este documento. Probá con otro archivo.');}
+  finally{conversion=null;$('docCancel').hidden=true;for(const id of ['docScan','docLayout','docLanguage','docForceOCR'])$(id).disabled=false;busy=false;$('docConvert').disabled=!selected;$('docKindle').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
 });
 // Tabs keep the video and document workflows independent.
 for(const mode of ['video','document','split']) $('tab-'+mode).addEventListener('click',()=>{
@@ -141,3 +160,6 @@ $('docDownload').addEventListener('click',()=>{if(!resultURL)return;const a=docu
 export {readDocument,writeDocument,script};
 
 $('docKindle').addEventListener('click',()=>{if(!selected||busy)return;$('docFormat').value='epub';$('docFormat').dispatchEvent(new Event('change'));$('docConvert').click();});
+
+$('docScan').addEventListener('change',()=>{$('docScanOptions').hidden=!$('docScan').checked;clearResult();});
+$('docCancel').addEventListener('click',()=>{conversion?.abort();message('Cancelando…');});
