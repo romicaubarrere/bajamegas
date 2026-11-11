@@ -142,6 +142,7 @@ a.btn {text-decoration:none;}
     <h1>Bajamegas<span class="unit">MB↓</span></h1>
     <p class="lede">Achicá videos o convertí documentos entre formatos. Todo pasa en tu navegador: el archivo no se sube a ningún lado, no hay límite de usos y es gratis.</p>
   </header>
+  <nav aria-label="Ayuda para tu lector"><a class="linkbtn" href="#enviar-kobo">Cómo pasar el libro del celular al Kobo</a></nav>
   <div role="tablist" aria-label="Herramientas" class="chips">
     <button class="chip" id="tab-video" role="tab" aria-selected="true" aria-controls="panel-video">Comprimir video</button>
     <button class="chip" id="tab-document" role="tab" aria-selected="false" aria-controls="panel-document">Convertir documentos</button>
@@ -253,7 +254,8 @@ a.btn {text-decoration:none;}
       <label><input type="checkbox" id="docForceOCR"> Rehacer todo el OCR (para texto mal reconocido; tarda más)</label>
       <p class="warn">El OCR puede cometer errores. Un libro completo puede tardar bastante: dejá esta pestaña abierta. No recupera el diseño ni las imágenes del libro en el EPUB.</p>
     </div>
-    <div class="actions"><button id="docKindle" class="btn primary" disabled>Pasar a EPUB para Kindle</button><button id="docDownload" class="btn primary" hidden>Descargar EPUB</button><button id="docCancel" class="btn" hidden>Cancelar conversión</button></div>
+    <div class="actions"><button id="docKindle" class="btn primary" disabled>Pasar a EPUB para Kobo / Kindle</button><button id="docDownload" class="btn primary" hidden>Descargar EPUB</button><button id="docCancel" class="btn" hidden>Cancelar conversión</button></div>
+    <p class="note"><a href="#enviar-kobo">Ya tengo el EPUB: cómo enviarlo del celular al Kobo</a></p>
     <p id="docStatus" role="status" aria-live="polite" class="msg"></p>
     <details><summary>Otros formatos</summary><div class="stack" style="margin-top:12px">
     <div class="field"><label for="docFormat">Convertir a</label>
@@ -277,6 +279,24 @@ a.btn {text-decoration:none;}
     <div class="actions"><button id="splitGo" class="btn primary" disabled>Dividir PDF</button><button id="splitCancel" class="btn" hidden>Cancelar división</button></div>
     <p id="splitStatus" class="msg" role="status" aria-live="polite"></p>
     <ol id="splitResults" class="stack" style="list-style:none;padding:0;margin:0" aria-label="Partes del PDF"></ol>
+  </section>
+  <section id="enviar-kobo" class="panel" aria-labelledby="kobo-title">
+    <h2 id="kobo-title">Del celular al Kobo, sin cable</h2>
+    <p class="lede">Para tu Kobo Clara Colour: primero descargá el EPUB en el celular. Después enviás ese mismo archivo con BookDrop (antes Send to Kobo / Djazz).</p>
+    <div class="actions"><a class="btn primary" href="https://bookdrop.cc/" target="_blank" rel="noopener noreferrer">Abrir envío desde el celular</a><a class="btn" href="https://bookdrop.cc/receive" target="_blank" rel="noopener noreferrer">Abrir recepción en el Kobo</a></div>
+    <ol style="padding-left:24px">
+      <li><strong>En el celular:</strong> convertí el libro acá y tocá <strong>Descargar EPUB</strong>. Guardalo en Archivos o Descargas; esperá a que termine la descarga.</li>
+      <li><strong>En el Kobo:</strong> activá el Wi-Fi y abrí el navegador. Suele estar en <strong>Más → Configuración → Funciones beta → Navegador web</strong>; los nombres pueden variar según la versión.</li>
+      <li>En ese navegador escribí <strong>bookdrop.cc/receive</strong>. Dejá abierta la página: te mostrará un código de cuatro caracteres y un QR.</li>
+      <li><strong>Volvé al celular:</strong> escaneá ese QR o abrí <a href="https://bookdrop.cc/" target="_blank" rel="noopener noreferrer">bookdrop.cc</a> e ingresá el código del Kobo en <strong>Device key</strong>.</li>
+      <li>Tocá <strong>Choose files</strong>, elegí el EPUB que descargaste y después <strong>Upload and send</strong>. El servicio admite hasta <strong>50 MB por archivo</strong>.</li>
+      <li><strong>En el Kobo:</strong> esperá a que aparezca el enlace del libro, tocá para descargar y aceptá la descarga si te lo pide. Al terminar, buscá el libro en <strong>Mis libros</strong>.</li>
+    </ol>
+    <p class="note">No cierres el navegador del Kobo ni generes otro código hasta terminar. Si no aparece el libro, comprobá que ambos dispositivos tengan internet, que el código coincida y que el archivo sea EPUB. Si venció la sesión, generá un código nuevo y repetí el envío.</p>
+    <p class="note">En iPhone, revisá <strong>Archivos → Descargas</strong> (puede estar en iCloud Drive o En mi iPhone). En Android, revisá <strong>Archivos → Descargas</strong>. El envío descarga una copia en el Kobo; no es una sincronización de la nube de Kobo.</p>
+    <p class="warn">La conversión de Bajamegas ocurre en tu navegador. <strong>Enviar con BookDrop es un paso aparte:</strong> subís el EPUB a su servidor temporalmente; según el servicio, se elimina unos minutos después de cerrar el navegador del lector o generar otro código. Es un servicio independiente de Kobo.</p>
+    <p class="note">Podés guardar esta sección y BookDrop en favoritos para la próxima vez.</p>
+    <details><summary>Fuentes y ayuda</summary><p><a href="https://bookdrop.cc/" target="_blank" rel="noopener noreferrer">Instrucciones de BookDrop</a> · <a href="https://help.kobo.com/hc/es/articles/360017763733-Sobre-las-funciones-beta" target="_blank" rel="noopener noreferrer">Navegador del Kobo y funciones beta</a></p></details>
   </section>
   <footer class="fine">
     <p>El tamaño final puede quedar un poco arriba o abajo del objetivo. Si se pasa, probá de nuevo pidiendo unos MB menos.</p>
