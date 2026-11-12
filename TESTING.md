@@ -57,3 +57,14 @@ Pruebas en Chrome con Tesseract en español:
 - Descarga de ese EPUB completada. Se validaron mimetype sin compresión, XML de contenedor, OPF, contenido XHTML e índice.
 
 No se garantiza transcripción perfecta ni se comparó el texto completo palabra por palabra con el impreso. El resultado incluyó aviso de confianza OCR baja.
+
+
+## Revisión UX y herramientas PDF (12/11/2026)
+
+- `npm run check`: correcto. `npm test`: 15 pruebas aprobadas.
+- Unión con pdf-lib real: documentos de 2 y 1 páginas conservan dimensiones y orden; abortar antes de procesar rechaza con AbortError.
+- Navegador: selección múltiple, reordenamiento y descarga del PDF unido. El archivo descargado tiene 3 páginas con anchos 310, 210 y 220, en el orden cambiado desde la interfaz.
+- Navegador: PNG a PDF A4; archivo descargado válido de una página.
+- Navegador: PDF de dos páginas a ZIP JPG; ZIP descargado con pagina-0001.jpg y pagina-0002.jpg, ambas imágenes válidas.
+- Tema oscuro: permanece al recargar; conversor abre por defecto y formato de salida visible.
+- Rangos inválidos, duplicados y ajuste proporcional sin recorte cubiertos por las nuevas pruebas automáticas.

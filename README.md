@@ -48,3 +48,14 @@ Elegir el PDF completo y tocar «Pasar a EPUB para Kindle» basta para generar u
 El modo Kindle detecta PDF producidos por ClearScan/Paper Capture y documentos sin texto en las dos primeras hojas; también puede activarse manualmente. Usa PDF.js para respetar la rotación, divide visualmente hojas apaisadas en mitades y ordena izquierda antes de derecha. Si hay texto utilizable, lo ordena por coordenadas; si falta o está muy dañado, rasteriza la página y aplica Tesseract.js 6.0.1 con Tesseract.js-core 6.0.0. El usuario puede forzar OCR de todas las páginas en español o inglés.
 
 Se procesa una hoja por vez, reutilizando un único worker OCR y liberando los canvas, con progreso y cancelación. El texto se limpia mediante reglas para guiones de fin de línea, saltos y encabezados repetidos, y termina en un único archivo. El OCR es aproximado y no hace corrección editorial; notas al pie, tablas y diseños complejos pueden perder estructura. Se recorta un margen pequeño de la imagen antes del OCR para reducir ruido del escáner. Las bibliotecas y modelos requieren conexión, pero el PDF no se envía a un servidor.
+
+
+## Herramientas y navegación
+
+La portada abre el conversor de documentos, con el formato de destino visible. Las herramientas se eligen desde tarjetas accesibles con teclado. La guía de envío al Kobo está en una pestaña independiente. El selector claro/oscuro conserva la preferencia en el navegador.
+
+- Unir PDF: agrega archivos, permite subir/bajar/quitar y conserva el orden elegido y las páginas originales. Hasta 200 MB de entrada en total.
+- Imágenes a PDF: JPG, PNG o WebP, una imagen por página, con orden editable y tamaño A4 o según la imagen. Normaliza a JPG de alta calidad, hasta 4096 píxeles por lado.
+- PDF a imágenes: rango de páginas, JPG o PNG, 72 o 144 ppp. Descarga un ZIP numerado, hasta 100 páginas por proceso y 120 MB de imágenes. Las páginas muy grandes se ajustan a 4096 píxeles por lado.
+
+Las nuevas herramientas procesan en el navegador y permiten cancelar. PDF protegidos con contraseña deben desbloquearse antes. No se preservan firmas digitales al editar documentos.

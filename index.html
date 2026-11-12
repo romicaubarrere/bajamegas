@@ -1,6 +1,6 @@
 <!doctype html><html lang="es-UY"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
-<title>Bajamegas | Comprimí videos en tu navegador</title>
-<meta name="description" content="Reducí el tamaño de tus videos gratis, directamente en tu navegador, sin subirlos a un servidor.">
+<title>Bajamegas | Convertí, uní y dividí tus archivos</title>
+<meta name="description" content="Convertí documentos, uní y dividí PDF, pasá imágenes a PDF y comprimí videos en tu navegador.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -136,19 +136,23 @@ input[type="number"] { width: 6.5em; }
 a.btn {text-decoration:none;}
 </style>
 
-</head><body>
+<link rel="stylesheet" href="./ux.css"><script>try{const t=localStorage.getItem("bajamegas-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;}catch{}</script></head><body>
 <main class="wrap">
   <header>
+    <div class="brand-row"><span class="eyebrow">TU CAJA DE HERRAMIENTAS</span><button id="themeToggle" class="btn theme-toggle" type="button" aria-pressed="false">Tema oscuro</button></div>
     <h1>Bajamegas<span class="unit">MB↓</span></h1>
-    <p class="lede">Achicá videos o convertí documentos entre formatos. Todo pasa en tu navegador: el archivo no se sube a ningún lado, no hay límite de usos y es gratis.</p>
+    <p class="lede">Convertí, organizá y achicá tus archivos. Elegí una herramienta y resolvelo acá, gratis y desde tu navegador.</p>
   </header>
-  <nav aria-label="Ayuda para tu lector"><a class="linkbtn" href="#enviar-kobo">Cómo pasar el libro del celular al Kobo</a></nav>
-  <div role="tablist" aria-label="Herramientas" class="chips">
-    <button class="chip" id="tab-video" role="tab" aria-selected="true" aria-controls="panel-video">Comprimir video</button>
-    <button class="chip" id="tab-document" role="tab" aria-selected="false" aria-controls="panel-document">Convertir documentos</button>
-  <button class="chip" id="tab-split" role="tab" aria-selected="false" aria-controls="panel-split">Dividir PDF</button>
+  <div role="tablist" aria-label="Herramientas" class="tool-grid">
+<button class="tool-card" id="tab-document" role="tab" aria-selected="true" aria-controls="panel-document"><span class="tool-number">01</span><strong>Convertir</strong><small>PDF, EPUB, Word y más</small></button>
+<button class="tool-card" id="tab-merge" role="tab" aria-selected="false" aria-controls="panel-merge"><span class="tool-number">02</span><strong>Unir PDF</strong><small>Varios archivos en uno</small></button>
+<button class="tool-card" id="tab-split" role="tab" aria-selected="false" aria-controls="panel-split"><span class="tool-number">03</span><strong>Dividir PDF</strong><small>Separá en partes</small></button>
+<button class="tool-card" id="tab-images" role="tab" aria-selected="false" aria-controls="panel-images"><span class="tool-number">04</span><strong>Imágenes a PDF</strong><small>Tus fotos, un documento</small></button>
+<button class="tool-card" id="tab-raster" role="tab" aria-selected="false" aria-controls="panel-raster"><span class="tool-number">05</span><strong>PDF a imágenes</strong><small>Cada página en JPG o PNG</small></button>
+<button class="tool-card" id="tab-video" role="tab" aria-selected="false" aria-controls="panel-video"><span class="tool-number">06</span><strong>Comprimir video</strong><small>Elegí el peso final</small></button>
+<button class="tool-card" id="tab-kobo" role="tab" aria-selected="false" aria-controls="enviar-kobo"><span class="tool-number">07</span><strong>Enviar al Kobo</strong><small>Guía desde el celular</small></button>
   </div>
-  <div id="panel-video" role="tabpanel" aria-labelledby="tab-video" class="stack">
+  <div id="panel-video" role="tabpanel" aria-labelledby="tab-video" class="stack workspace" hidden>
 
   <section id="pick" class="drop" tabindex="0" role="button" aria-label="Elegir un video">
     <input type="file" id="file" accept="video/*" hidden>
@@ -238,14 +242,21 @@ a.btn {text-decoration:none;}
   <section id="err" class="error" role="alert" hidden></section>
 
   </div>
-  <section id="panel-document" role="tabpanel" aria-labelledby="tab-document" class="stack" hidden>
-    <h2>De un formato a otro</h2>
+  <section id="panel-document" role="tabpanel" aria-labelledby="tab-document" class="stack workspace">
+    <h2>Convertí tus documentos</h2>
     <p class="lede">Pasá tus documentos a PDF, EPUB para tu lector, Markdown, Word, texto o HTML. El archivo se procesa en tu dispositivo.</p>
     <label for="docFile" class="btn">Elegí un documento
       <input id="docFile" type="file" accept=".pdf,.epub,.md,.markdown,.docx,.txt,.html,.htm" style="display:block;margin-top:12px;max-width:100%">
     </label>
     <p id="docName" class="note">Todavía no elegiste un documento.</p>
-    <p class="note">¿Un libro largo o escaneado? Tocá el botón para Kindle: el PDF se lee en tandas de 500 páginas y se descarga <strong>un solo EPUB con todo el texto</strong>, en el orden original. No tenés que dividirlo antes.</p>
+    <div class="stack format-choice">
+    <div class="field"><label for="docFormat">Convertir a</label>
+      <select id="docFormat"><option value="epub">EPUB · libro digital</option><option value="pdf">PDF</option><option value="md">Markdown (.md)</option><option value="docx">Word (.docx)</option><option value="txt">Texto (.txt)</option><option value="html">HTML</option></select>
+    </div>
+    <div><button id="docConvert" class="btn primary" disabled>Convertir documento</button></div>
+    <p class="note">Convierte el texto y los títulos. No conserva imágenes, tablas ni el diseño exacto.</p>
+    </div>
+    <p class="note">¿Un PDF largo? Se convierte completo en <strong>un solo archivo</strong>. No hace falta dividirlo antes.</p>
     <label><input type="checkbox" id="docScan"> Libro escaneado o páginas dobles (detección automática + OCR)</label>
     <div id="docScanOptions" class="stack" hidden>
       <p class="note">Los escaneos conocidos y los PDF sin texto se detectan solos. También podés activar este modo manualmente. Ordena primero la izquierda y después la derecha, elimina encabezados repetidos y une palabras cortadas. Usa el texto existente; si falta, reconoce la imagen con OCR. El resultado sigue siendo un solo archivo.</p>
@@ -254,20 +265,12 @@ a.btn {text-decoration:none;}
       <label><input type="checkbox" id="docForceOCR"> Rehacer todo el OCR (para texto mal reconocido; tarda más)</label>
       <p class="warn">El OCR puede cometer errores. Un libro completo puede tardar bastante: dejá esta pestaña abierta. No recupera el diseño ni las imágenes del libro en el EPUB.</p>
     </div>
-    <div class="actions"><button id="docKindle" class="btn primary" disabled>Pasar a EPUB para Kobo / Kindle</button><button id="docDownload" class="btn primary" hidden>Descargar EPUB</button><button id="docCancel" class="btn" hidden>Cancelar conversión</button></div>
-    <p class="note"><a href="#enviar-kobo">Ya tengo el EPUB: cómo enviarlo del celular al Kobo</a></p>
+    <div class="actions"><button id="docKindle" class="btn primary" disabled hidden>Convertir a EPUB</button><button id="docDownload" class="btn primary" hidden>Descargar EPUB</button><button id="docCancel" class="btn" hidden>Cancelar conversión</button></div>
     <p id="docStatus" role="status" aria-live="polite" class="msg"></p>
-    <details><summary>Otros formatos</summary><div class="stack" style="margin-top:12px">
-    <div class="field"><label for="docFormat">Convertir a</label>
-      <select id="docFormat"><option value="pdf">PDF</option><option value="epub">EPUB · lector de libros</option><option value="md">Markdown (.md)</option><option value="docx">Word (.docx)</option><option value="txt">Texto (.txt)</option><option value="html">HTML</option></select>
-    </div>
-    <p class="warn">Conversión de texto: no conserva imágenes, tablas ni el diseño exacto. Mantiene títulos básicos cuando el formato lo permite. Para PDF escaneado, activá el modo OCR; EPUB con DRM y Word .doc antiguo no son compatibles.</p>
-    <p class="note">PDF hasta 200 MB, sin límite de 500 páginas. Otros documentos hasta 40 MB. Para Google Docs: Archivo → Descargar → Microsoft Word (.docx), y elegí ese archivo acá. Markdown conserva el contenido y los títulos; otros estilos pueden quedar como texto.</p>
-    <div><button id="docConvert" class="btn" disabled>Convertir documento</button></div></div></details>
     <details id="docPreviewWrap" hidden><summary>Vista previa del texto</summary><pre id="docPreview" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-height:280px;overflow:auto"></pre></details>
-    <p class="note">Necesitás conexión para cargar los conversores. Tus documentos no se envían a un servidor.</p>
+    <details><summary>Límites y formatos compatibles</summary><p class="note">PDF hasta 200 MB, sin límite de 500 páginas. Otros documentos hasta 40 MB. Para Google Docs: Archivo → Descargar → Microsoft Word (.docx). Word .doc antiguo y EPUB con DRM no son compatibles.</p></details>
   </section>
-  <section id="panel-split" role="tabpanel" aria-labelledby="tab-split" class="stack" hidden>
+  <section id="panel-split" role="tabpanel" aria-labelledby="tab-split" class="stack workspace" hidden>
     <h2>Un PDF grande, en partes</h2>
     <p class="lede">Usá esta opción si querés varios PDF independientes para compartir por separado. Para convertir un libro completo a un solo EPUB, usá «Convertir documentos» sin dividirlo antes.</p>
     <label class="btn" for="splitFile">Elegí el PDF completo<input id="splitFile" type="file" accept=".pdf,application/pdf" style="display:block;margin-top:12px;max-width:100%"></label>
@@ -280,7 +283,10 @@ a.btn {text-decoration:none;}
     <p id="splitStatus" class="msg" role="status" aria-live="polite"></p>
     <ol id="splitResults" class="stack" style="list-style:none;padding:0;margin:0" aria-label="Partes del PDF"></ol>
   </section>
-  <section id="enviar-kobo" class="panel" aria-labelledby="kobo-title">
+<section id="panel-merge" role="tabpanel" aria-labelledby="tab-merge" class="stack workspace" hidden><h2>Uní varios PDF</h2><p class="lede">Agregá los PDF, ordenalos y descargá un único archivo. Conserva las páginas originales.</p><label class="upload-box" for="mergeFile"><strong>Elegí archivos</strong><span>o arrastralos acá</span><input id="mergeFile" type="file" accept=".pdf,application/pdf" multiple></label><p class="note">Hasta 200 MB en total. Podés agregar más archivos y cambiar el orden con las flechas.</p><ol id="mergeList" class="file-list"></ol><div class="actions"><button id="mergeGo" class="btn primary" disabled>Unir PDF</button><button id="mergeCancel" class="btn" hidden>Cancelar</button><a id="mergeDownload" class="btn primary" hidden>Descargar</a></div><p id="mergeStatus" role="status" aria-live="polite" class="msg"></p></section>
+<section id="panel-images" role="tabpanel" aria-labelledby="tab-images" class="stack workspace" hidden><h2>De imágenes a PDF</h2><p class="lede">Una imagen por página, en el orden que elijas. Acepta JPG, PNG y WebP; no hace OCR. Las fotos se ajustan hasta 4096 píxeles y se guardan como JPG de alta calidad.</p><label class="upload-box" for="imagesFile"><strong>Elegí archivos</strong><span>o arrastralos acá</span><input id="imagesFile" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple></label><p class="note">Hasta 200 MB en total. Podés agregar más archivos y cambiar el orden con las flechas.</p><ol id="imagesList" class="file-list"></ol><div class="field"><label for="imagePage">Tamaño de página</label><select id="imagePage"><option value="a4">A4 · ajustar sin recortar</option><option value="original">Según la imagen</option></select></div><div class="actions"><button id="imagesGo" class="btn primary" disabled>Crear PDF</button><button id="imagesCancel" class="btn" hidden>Cancelar</button><a id="imagesDownload" class="btn primary" hidden>Descargar</a></div><p id="imagesStatus" role="status" aria-live="polite" class="msg"></p></section>
+<section id="panel-raster" role="tabpanel" aria-labelledby="tab-raster" class="stack workspace" hidden><h2>De PDF a imágenes</h2><p class="lede">Convertí páginas completas y descargalas juntas en un ZIP.</p><label class="upload-box" for="rasterFile"><strong>Elegí un PDF</strong><span>o arrastralos acá</span><input id="rasterFile" type="file" accept=".pdf,application/pdf" ></label><p class="note">Hasta 200 MB en total. Elegí un rango para procesar solo las páginas que necesitás.</p><ol id="rasterList" class="file-list"></ol><div class="fields"><div class="field"><label for="rasterRange">Páginas (vacío = todas)</label><input id="rasterRange" type="text" placeholder="Ej.: 1-5, 8, 12"></div><div class="field"><label for="rasterFormat">Formato</label><select id="rasterFormat"><option value="jpeg">JPG · más liviano</option><option value="png">PNG · sin pérdida</option></select></div><div class="field"><label for="rasterQuality">Resolución</label><select id="rasterQuality"><option value="1">Normal · 72 ppp</option><option value="2" selected>Alta · 144 ppp</option></select></div></div><p class="note">Para cuidar la memoria, convertí hasta 100 páginas por vez. Los archivos se guardan en el ZIP por número de página.</p><div class="actions"><button id="rasterGo" class="btn primary" disabled>Crear imágenes</button><button id="rasterCancel" class="btn" hidden>Cancelar</button><a id="rasterDownload" class="btn primary" hidden>Descargar</a></div><p id="rasterStatus" role="status" aria-live="polite" class="msg"></p></section>
+  <section id="enviar-kobo" class="stack workspace" role="tabpanel" aria-labelledby="tab-kobo" hidden>
     <h2 id="kobo-title">Del celular al Kobo, sin cable</h2>
     <p class="lede">Para tu Kobo Clara Colour: primero descargá el EPUB en el celular. Después enviás ese mismo archivo con BookDrop (antes Send to Kobo / Djazz).</p>
     <div class="actions"><a class="btn primary" href="https://bookdrop.cc/" target="_blank" rel="noopener noreferrer">Abrir envío desde el celular</a><a class="btn" href="https://bookdrop.cc/receive" target="_blank" rel="noopener noreferrer">Abrir recepción en el Kobo</a></div>
@@ -298,14 +304,14 @@ a.btn {text-decoration:none;}
     <p class="note">Podés guardar esta sección y BookDrop en favoritos para la próxima vez.</p>
     <details><summary>Fuentes y ayuda</summary><p><a href="https://bookdrop.cc/" target="_blank" rel="noopener noreferrer">Instrucciones de BookDrop</a> · <a href="https://help.kobo.com/hc/es/articles/360017763733-Sobre-las-funciones-beta" target="_blank" rel="noopener noreferrer">Navegador del Kobo y funciones beta</a></p></details>
   </section>
-  <footer class="fine">
+  <footer class="fine" hidden>
     <p>El tamaño final puede quedar un poco arriba o abajo del objetivo. Si se pasa, probá de nuevo pidiendo unos MB menos.</p>
     <p>El formato de salida depende de tu navegador: MP4 cuando lo permite y WebM como alternativa, cuya compatibilidad depende de la aplicación donde lo compartas.</p>
   </footer>
-</main>
+<p class="local-note">Conversión local · Tus archivos se quedan en tu dispositivo. Necesitás conexión para cargar las herramientas.</p></main>
 
 <script type="module" src="./app.js"></script>
 <script type="module" src="./documents.js"></script>
 <script type="module" src="./pdf-split.js"></script>
 
-</body></html>
+<script type="module" src="./ui.js"></script><script type="module" src="./pdf-tools.js"></script></body></html>

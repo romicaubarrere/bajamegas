@@ -4,5 +4,5 @@
   "private": true,
   "type": "module",
   "description": "Compresor de videos que procesa los archivos localmente en el navegador",
-  "scripts": { "test": "node --test", "check": "node --check app.js && node --check plan.js && node --check documents.js && node --check doc-core.js && node --check pdf-split.js && node --check pdf-split-core.js && node --check book-ocr.js && node --check book-core.js" }
+  "scripts": { "test": "node --test", "check": "node --check app.js && node --check plan.js && node --check documents.js && node --check doc-core.js && node --check pdf-split.js && node --check pdf-split-core.js && node --check book-ocr.js && node --check book-core.js && node --check ui.js && node --check pdf-tools.js && node --check pdf-tools-core.js" }
 }

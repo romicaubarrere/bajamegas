@@ -147,14 +147,6 @@ $('docConvert').addEventListener('click',async()=>{
   } catch(error){message(conversion?.signal.aborted?'Conversión cancelada. Podés volver a intentarlo.':error.message||'No se pudo convertir este documento. Probá con otro archivo.');}
   finally{conversion=null;$('docCancel').hidden=true;for(const id of ['docScan','docLayout','docLanguage','docForceOCR'])$(id).disabled=false;busy=false;$('docConvert').disabled=!selected;$('docKindle').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
 });
-// Tabs keep the video and document workflows independent.
-for(const mode of ['video','document','split']) $('tab-'+mode).addEventListener('click',()=>{
-  document.querySelector('footer').hidden=mode!=='video';
-  for(const id of ['video','document','split']){
-    $('panel-'+id).hidden=id!==mode;$('tab-'+id).setAttribute('aria-selected',String(id===mode));
-  }
-});
-
 $('docDownload').addEventListener('click',()=>{if(!resultURL)return;const a=document.createElement('a');a.href=resultURL;a.download=$('docDownload').dataset.filename;document.body.appendChild(a);a.click();a.remove();});
 
 export {readDocument,writeDocument,script};
