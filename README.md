@@ -52,7 +52,7 @@ Se procesa una hoja por vez, reutilizando un único worker OCR y liberando los c
 
 ## Herramientas y navegación
 
-La portada abre el conversor de documentos, con el formato de destino visible. Las herramientas se eligen desde tarjetas accesibles con teclado. La guía de envío al Kobo está en una pestaña independiente. El selector claro/oscuro conserva la preferencia en el navegador.
+La portada abre el conversor de documentos, con el formato de destino visible. Las herramientas se eligen desde categorías, un menú lateral en computadora y un selector compacto en celular. El buscador admite términos con o sin tildes y acciones como juntar o rotar. Los favoritos se guardan localmente y muestran tres accesos rápidos; Ver todas abre el listado completo. La guía de envío al Kobo está en una pestaña independiente. El selector claro/oscuro conserva la preferencia en el navegador.
 
 - Unir PDF: agrega archivos, permite subir/bajar/quitar y conserva el orden elegido y las páginas originales. Hasta 200 MB de entrada en total.
 - Imágenes a PDF: JPG, PNG o WebP, una imagen por página, con orden editable y tamaño A4 o según la imagen. Normaliza a JPG de alta calidad, hasta 4096 píxeles por lado.

@@ -78,3 +78,8 @@ No se garantiza transcripción perfecta ni se comparó el texto completo palabra
 - Compresión equilibrada de PDF con fotografía: 4.202.241 a 477.142 bytes (88,6% menos), una página conservada de 500 × 700 puntos. Esta reducción es del fixture, no una promesa para otros PDF.
 - Pruebas de orden completo, rangos inválidos, cancelación de edición, comparación de tamaños y formato SRT/VTT.
 - Límites: no se verificó precisión en conversaciones largas, ruido, múltiples hablantes ni rendimiento en celulares. La transcripción requiere revisar el resultado.
+
+
+## Navegación compacta
+
+Comprobación en navegador: búsqueda «rotar» encuentra Editar páginas; abrir resultado activa su panel y categoría. Agregar a favoritos y recargar conserva el acceso. Categorías Audio y video / Convertir abren sus herramientas. Accesos por hash conservados. Verificación directa de búsqueda sin tildes, sin resultados y favoritos inválidos/duplicados. La interfaz mantiene los 10 paneles y sus IDs para los flujos entre herramientas.
