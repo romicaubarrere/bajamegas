@@ -68,3 +68,13 @@ No se garantiza transcripción perfecta ni se comparó el texto completo palabra
 - Navegador: PDF de dos páginas a ZIP JPG; ZIP descargado con pagina-0001.jpg y pagina-0002.jpg, ambas imágenes válidas.
 - Tema oscuro: permanece al recargar; conversor abre por defecto y formato de salida visible.
 - Rangos inválidos, duplicados y ajuste proporcional sin recorte cubiertos por las nuevas pruebas automáticas.
+
+
+## Transcripción y PDF (12/11/2026)
+
+- 18 pruebas automáticas y revisión de sintaxis aprobadas.
+- En navegador: WAV sintético en inglés, 7 segundos, reconoce el contenido esperado. Descarga SRT verificada con marcas de tiempo y texto. MP4 con la misma pista también se reconoce correctamente.
+- En navegador y sobre los archivos descargados: extracción de páginas 1 y 3; rotación de página 2 sumando 180° a sus 90° originales; reordenamiento con flechas a 2, 1, 3. Anchos y rotaciones verificados con pdf-lib.
+- Compresión equilibrada de PDF con fotografía: 4.202.241 a 477.142 bytes (88,6% menos), una página conservada de 500 × 700 puntos. Esta reducción es del fixture, no una promesa para otros PDF.
+- Pruebas de orden completo, rangos inválidos, cancelación de edición, comparación de tamaños y formato SRT/VTT.
+- Límites: no se verificó precisión en conversaciones largas, ruido, múltiples hablantes ni rendimiento en celulares. La transcripción requiere revisar el resultado.

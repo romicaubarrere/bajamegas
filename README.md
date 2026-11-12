@@ -59,3 +59,10 @@ La portada abre el conversor de documentos, con el formato de destino visible. L
 - PDF a imágenes: rango de páginas, JPG o PNG, 72 o 144 ppp. Descarga un ZIP numerado, hasta 100 páginas por proceso y 120 MB de imágenes. Las páginas muy grandes se ajustan a 4096 píxeles por lado.
 
 Las nuevas herramientas procesan en el navegador y permiten cancelar. PDF protegidos con contraseña deben desbloquearse antes. No se preservan firmas digitales al editar documentos.
+
+
+## Transcripción y edición de páginas
+
+- Transcripción de archivos de audio o de la pista de audio de un video que el navegador pueda decodificar. Hasta 100 MB y 30 minutos. Usa Whisper tiny multilingüe cuantizado, con Transformers.js 2.17.2 en un Web Worker y WASM de un solo hilo. El modelo se descarga de Hugging Face; no envía audio a servidores ni necesita claves. Permite cancelar, corregir texto y segmentos, copiar, y descargar TXT/SRT/VTT. No identifica hablantes; los tiempos son aproximados. El texto completo y los segmentos se editan por separado.
+- Editar páginas: extraer rangos, rotar selectivamente (se suma al giro original) y reordenar sin omisiones ni duplicados. Orden mediante flechas, inversión o rangos escritos, incluidos descendentes. Vista previa por página y listas de 30 elementos. Hasta 200 MB de entrada.
+- Comprimir PDF: optimiza estructura conservando texto o rasteriza a JPG a 120/85 ppp, hasta 100 páginas y 120 MB de imágenes. La rasterización pierde texto seleccionable, formularios, enlaces y accesibilidad. Si la copia no es más pequeña, ofrece el original. Reescribir documentos invalida firmas digitales.
