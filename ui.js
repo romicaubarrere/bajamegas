@@ -26,6 +26,7 @@ $('favoriteToggle').onclick=()=>{favorites=favorites.includes(selected.id)?favor
 function fromHash(){const key=location.hash.slice(1);activate($(key==='enviar-kobo'?'tab-kobo':key==='convertir'?'tab-document':'tab-'+key)||$('tab-document'),false);}
 fromHash();addEventListener('hashchange',fromHash);
 const dialog=$('toolDialog');
+dialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();dialog.close();}});
 function search(){
  const found=searchTools($('toolSearch').value);$('searchResults').replaceChildren();$('searchCount').textContent=found.length?found.length+' herramienta(s) disponible(s).':'No encontramos esa herramienta. Probá con PDF, audio o convertir.';
  for(const tool of found){const button=document.createElement('button');button.className='search-result';const text=document.createElement('span'),name=document.createElement('strong'),detail=document.createElement('small');name.textContent=tool.name;detail.textContent=tool.group+' · '+tool.detail;text.append(name,detail);button.appendChild(text);if(favorites.includes(tool.id)){const star=document.createElement('span');star.className='search-star';star.textContent='★';star.setAttribute('aria-label','Favorito');button.appendChild(star);}button.onclick=()=>{activate($('tab-'+tool.id));dialog.close();const heading=$( $('tab-'+tool.id).getAttribute('aria-controls')).querySelector('h2')||$('currentTool');heading.tabIndex=-1;heading.focus();};$('searchResults').appendChild(button);}
