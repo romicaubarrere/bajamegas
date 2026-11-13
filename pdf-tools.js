@@ -1,4 +1,4 @@
-import {script} from './documents.js';
+import {script} from './documents.js?v=usability-1';
 import {mergePDFs,pageSelection,imagePlacement} from './pdf-tools-core.js';
 const $=id=>document.getElementById(id);
 const MAX=200*1024*1024;

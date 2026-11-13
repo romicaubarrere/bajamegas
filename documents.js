@@ -117,35 +117,35 @@ async function writeDocument(blocks,format,title) {
 }
 let selected=null, resultURL=null, version=0, busy=false, conversion=null;
 const message=text=>{$('docStatus').textContent=text;};
-function clearResult(){if(resultURL)URL.revokeObjectURL(resultURL);resultURL=null;$('docDownload').hidden=true;$('docPreviewWrap').hidden=true;}
+function clearResult(){$('docConvert').hidden=false;if(resultURL)URL.revokeObjectURL(resultURL);resultURL=null;$('docDownload').hidden=true;$('docPreviewWrap').hidden=true;}
 $('docFile').addEventListener('change',()=>{
   version++;selected=$('docFile').files[0]||null;clearResult();
-  $('docName').textContent=selected?selected.name+' · '+(selected.size/1024/1024).toFixed(2)+' MB':'Todavía no elegiste un documento.';
-  $('docConvert').disabled=!selected;$('docKindle').disabled=!selected;message('');
+  $('docName').hidden=!selected;$('docName').textContent=selected?selected.name+' · '+(selected.size/1024/1024).toFixed(2)+' MB':'Todavía no elegiste un documento.';
+  let error='';if(selected){const max=/\.pdf$/i.test(selected.name)?200:40;if(!/\.(pdf|epub|md|markdown|docx|txt|html|htm)$/i.test(selected.name))error='Formato no compatible. Elegí PDF, EPUB, DOCX, MD, TXT o HTML.';else if(selected.size>max*1024*1024)error='El archivo supera los '+max+' MB. Elegí uno más chico.';}if(error)selected=null;$('docConvert').disabled=!selected;$('docKindle').disabled=!selected;$('docNextStep').textContent=selected?'Archivo listo. Elegí el formato y convertí.':'Primero elegí un archivo compatible.';message(error);
 });
-$('docFormat').addEventListener('change',()=>{version++;clearResult();message('');});
+function formatLabel(){$('docConvert').textContent='Convertir a '+$('docFormat').value.toUpperCase();}formatLabel();$('docFormat').addEventListener('change',()=>{version++;clearResult();formatLabel();message('');});
 $('docConvert').addEventListener('click',async()=>{
   if(!selected||busy)return;
   const maxMB=/\.pdf$/i.test(selected.name)?200:40;
   if(selected.size>maxMB*1024*1024){message('Elegí un documento de hasta '+maxMB+' MB.');return;}
   const current=++version, source=selected, format=$('docFormat').value;
-  busy=true;clearResult();$('docConvert').disabled=true;$('docKindle').disabled=true;$('docFile').disabled=true;$('docFormat').disabled=true;
+  busy=true;clearResult();$('panel-document').setAttribute('aria-busy','true');$('docConvert').textContent='Convirtiendo…';$('docNextStep').textContent='Mantené esta pestaña abierta hasta terminar.';$('docConvert').disabled=true;$('docKindle').disabled=true;$('docFile').disabled=true;$('docFormat').disabled=true;
   conversion=new AbortController();$('docCancel').hidden=false;
   for(const id of ['docScan','docLayout','docLanguage','docForceOCR'])$(id).disabled=true;
   message('Preparando conversión…');
   try {
     let report=null;
-    const blocks=await readDocument(source,message,{scanned:$('docScan').checked,layout:$('docLayout').value,language:$('docLanguage').value,forceOCR:$('docForceOCR').checked,signal:conversion.signal,onReport:value=>report=value,onScanned:()=>{$('docScan').checked=true;$('docScanOptions').hidden=false;}});
+    const blocks=await readDocument(source,message,{scanned:$('docScan').checked,layout:$('docLayout').value,language:$('docLanguage').value,forceOCR:$('docForceOCR').checked,signal:conversion.signal,onReport:value=>report=value,onScanned:()=>{$('docAdvanced').open=true;$('docScan').checked=true;$('docScanOptions').hidden=false;}});
     if(conversion.signal.aborted)throw new DOMException('Cancelado','AbortError');
     if(!blocks.length)throw new Error('No se encontró texto. Si es un PDF escaneado o una imagen, necesitás OCR antes de convertirlo.');
     message('Creando '+format.toUpperCase()+'…');
     const title=source.name.replace(/\.[^.]+$/,'')||'documento';
     const blob=await writeDocument(blocks,format,title);if(current!==version)return;
-    resultURL=URL.createObjectURL(blob);$('docDownload').textContent='Descargar '+format.toUpperCase();$('docDownload').dataset.filename=title+'-convertido.'+format;$('docDownload').hidden=false;
+    resultURL=URL.createObjectURL(blob);$('docDownload').textContent='Descargar '+format.toUpperCase();$('docDownload').dataset.filename=title+'-convertido.'+format;$('docDownload').hidden=false;$('docConvert').hidden=true;$('docNextStep').textContent='Tu archivo está listo para descargar.';
     $('docPreview').textContent=plainText(blocks).slice(0,2500);$('docPreviewWrap').hidden=false;
     message('Listo: '+format.toUpperCase()+' · '+(blob.size/1024).toFixed(1)+' KB. Un solo archivo con todo el texto. Revisá la vista previa antes de descargar.'+(report?.warning||''));
-  } catch(error){message(conversion?.signal.aborted?'Conversión cancelada. Podés volver a intentarlo.':error.message||'No se pudo convertir este documento. Probá con otro archivo.');}
-  finally{conversion=null;$('docCancel').hidden=true;for(const id of ['docScan','docLayout','docLanguage','docForceOCR'])$(id).disabled=false;busy=false;$('docConvert').disabled=!selected;$('docKindle').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
+  } catch(error){$('docNextStep').textContent='Podés volver a intentar la conversión.';message(conversion?.signal.aborted?'Conversión cancelada. Podés volver a intentarlo.':error.message||'No se pudo convertir este documento. Probá con otro archivo.');}
+  finally{$('panel-document').removeAttribute('aria-busy');formatLabel();conversion=null;$('docCancel').hidden=true;for(const id of ['docScan','docLayout','docLanguage','docForceOCR'])$(id).disabled=false;busy=false;$('docConvert').disabled=!selected;$('docKindle').disabled=!selected;$('docFile').disabled=false;$('docFormat').disabled=false;}
 });
 $('docDownload').addEventListener('click',()=>{if(!resultURL)return;const a=document.createElement('a');a.href=resultURL;a.download=$('docDownload').dataset.filename;document.body.appendChild(a);a.click();a.remove();});
 

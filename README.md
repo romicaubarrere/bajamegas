@@ -66,3 +66,8 @@ Las nuevas herramientas procesan en el navegador y permiten cancelar. PDF proteg
 - Transcripción de archivos de audio o de la pista de audio de un video que el navegador pueda decodificar. Hasta 100 MB y 30 minutos. Usa Whisper tiny multilingüe cuantizado, con Transformers.js 2.17.2 en un Web Worker y WASM de un solo hilo. El modelo se descarga de Hugging Face; no envía audio a servidores ni necesita claves. Permite cancelar, corregir texto y segmentos, copiar, y descargar TXT/SRT/VTT. No identifica hablantes; los tiempos son aproximados. El texto completo y los segmentos se editan por separado.
 - Editar páginas: extraer rangos, rotar selectivamente (se suma al giro original) y reordenar sin omisiones ni duplicados. Orden mediante flechas, inversión o rangos escritos, incluidos descendentes. Vista previa por página y listas de 30 elementos. Hasta 200 MB de entrada.
 - Comprimir PDF: optimiza estructura conservando texto o rasteriza a JPG a 120/85 ppp, hasta 100 páginas y 120 MB de imágenes. La rasterización pierde texto seleccionable, formularios, enlaces y accesibilidad. Si la copia no es más pequeña, ofrece el original. Reescribir documentos invalida firmas digitales.
+
+
+## Navegación revisada
+
+Un único botón Herramientas abre el menú con búsqueda, categorías y favoritos. No hay filtros ni selectores duplicados en la pantalla de trabajo. El menú guarda los favoritos en el dispositivo y el historial del navegador permite volver a la herramienta anterior sin reiniciar sus archivos. Ver UX-REVIEW.md para los hallazgos, cambios y límites de la revisión.

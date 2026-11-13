@@ -1,4 +1,4 @@
-import {script} from './documents.js';
+import {script} from './documents.js?v=usability-1';
 import {pageSelection} from './pdf-tools-core.js';
 import {orderedPages,editPDF,compressionResult} from './pdf-edit-core.js';
 const $=id=>document.getElementById(id),MAX=200*1024*1024;

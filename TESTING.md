@@ -83,3 +83,8 @@ No se garantiza transcripción perfecta ni se comparó el texto completo palabra
 ## Navegación compacta
 
 Comprobación en navegador: búsqueda «rotar» encuentra Editar páginas; abrir resultado activa su panel y categoría. Agregar a favoritos y recargar conserva el acceso. Categorías Audio y video / Convertir abren sus herramientas. Accesos por hash conservados. Verificación directa de búsqueda sin tildes, sin resultados y favoritos inválidos/duplicados. La interfaz mantiene los 10 paneles y sus IDs para los flujos entre herramientas.
+
+
+## Revisión de usabilidad
+
+Vista de 390 × 844 en Chrome revisada, menú único y búsqueda de rotación; Atrás recupera el conversor; selección por zona de archivo; rechazo inmediato de .doc; Markdown a EPUB y TXT con el bloque de acciones nuevo. Se mantienen las 18 pruebas automáticas. No se probó en Safari físico ni con VoiceOver.

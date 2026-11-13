@@ -1,4 +1,4 @@
-import {script} from './documents.js';
+import {script} from './documents.js?v=usability-1';
 import {pageRanges,splitPdf} from './pdf-split-core.js';
 const $=id=>document.getElementById(id);
 let source=null, selected=null, generation=0, processing=false;
